@@ -27,8 +27,14 @@ class AsrConfig {
 
   /// Sensible defaults — same endpoint the demo app was using. Pass your
   /// own [apiKey]; everything else can stay default.
-  factory AsrConfig.defaults({required String apiKey, String path = 'bigmodel_nostream'}) {
-    return AsrConfig(apiKey: apiKey, wsUrl: 'wss://voice.ap-southeast-1.bytepluses.com/api/v3/sauc/$path');
+  factory AsrConfig.defaults({
+    required String apiKey,
+    String path = 'bigmodel_nostream',
+  }) {
+    return AsrConfig(
+      apiKey: apiKey,
+      wsUrl: 'wss://voice.ap-southeast-1.bytepluses.com/api/v3/sauc/$path',
+    );
   }
 
   final String apiKey;

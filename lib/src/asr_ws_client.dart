@@ -20,8 +20,8 @@ class BytePlusAsrClient {
     required this.config,
     AsrLog? log,
     RequestBuilder? builder,
-  })  : _log = log ?? AsrLoggers.silent(),
-        _builder = builder ?? RequestBuilder(config: config) {
+  }) : _log = log ?? AsrLoggers.silent(),
+       _builder = builder ?? RequestBuilder(config: config) {
     _parser = ResponseParser();
   }
 
@@ -36,8 +36,10 @@ class BytePlusAsrClient {
   Future<void> createConnection() async {
     final headers = _builder.newAuthHeaders();
     try {
-      conn = IOWebSocketChannel.connect(Uri.parse(config.wsUrl),
-          headers: headers);
+      conn = IOWebSocketChannel.connect(
+        Uri.parse(config.wsUrl),
+        headers: headers,
+      );
       _log.call('Connected to ${config.wsUrl}', level: AsrLogLevel.info);
     } catch (e, st) {
       _log.call(
@@ -74,8 +76,7 @@ class BytePlusAsrClient {
   }
 
   void sendAudioSegment(Uint8List segment, {bool isLast = false}) {
-    final request =
-        _builder.newAudioOnlyRequest(seq, segment, isLast: isLast);
+    final request = _builder.newAudioOnlyRequest(seq, segment, isLast: isLast);
     conn!.sink.add(request);
     if (!isLast) seq += 1;
   }
@@ -90,8 +91,7 @@ class BytePlusAsrClient {
         } else if (message is List<int>) {
           bytes = Uint8List.fromList(message);
         } else if (message is String) {
-          _log.call('Received String: $message',
-              level: AsrLogLevel.debug);
+          _log.call('Received String: $message', level: AsrLogLevel.debug);
         }
         if (bytes == null) return;
         if (bytes.length < 4) return;
@@ -114,8 +114,7 @@ class BytePlusAsrClient {
         controller.close();
       },
       onDone: () {
-        _log.call('WebSocket connection closed',
-            level: AsrLogLevel.info);
+        _log.call('WebSocket connection closed', level: AsrLogLevel.info);
         controller.close();
       },
       cancelOnError: false,

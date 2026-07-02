@@ -23,44 +23,44 @@ class AsrRequestHeader {
   final List<int> reservedData;
 
   AsrRequestHeader withMessageType(int value) => AsrRequestHeader(
-        messageType: value,
-        messageTypeSpecificFlags: messageTypeSpecificFlags,
-        serializationType: serializationType,
-        compressionType: compressionType,
-        reservedData: reservedData,
-      );
+    messageType: value,
+    messageTypeSpecificFlags: messageTypeSpecificFlags,
+    serializationType: serializationType,
+    compressionType: compressionType,
+    reservedData: reservedData,
+  );
 
   AsrRequestHeader withMessageTypeSpecificFlags(int value) => AsrRequestHeader(
-        messageType: messageType,
-        messageTypeSpecificFlags: value,
-        serializationType: serializationType,
-        compressionType: compressionType,
-        reservedData: reservedData,
-      );
+    messageType: messageType,
+    messageTypeSpecificFlags: value,
+    serializationType: serializationType,
+    compressionType: compressionType,
+    reservedData: reservedData,
+  );
 
   AsrRequestHeader withSerializationType(int value) => AsrRequestHeader(
-        messageType: messageType,
-        messageTypeSpecificFlags: messageTypeSpecificFlags,
-        serializationType: value,
-        compressionType: compressionType,
-        reservedData: reservedData,
-      );
+    messageType: messageType,
+    messageTypeSpecificFlags: messageTypeSpecificFlags,
+    serializationType: value,
+    compressionType: compressionType,
+    reservedData: reservedData,
+  );
 
   AsrRequestHeader withCompressionType(int value) => AsrRequestHeader(
-        messageType: messageType,
-        messageTypeSpecificFlags: messageTypeSpecificFlags,
-        serializationType: serializationType,
-        compressionType: value,
-        reservedData: reservedData,
-      );
+    messageType: messageType,
+    messageTypeSpecificFlags: messageTypeSpecificFlags,
+    serializationType: serializationType,
+    compressionType: value,
+    reservedData: reservedData,
+  );
 
   AsrRequestHeader withReservedData(List<int> value) => AsrRequestHeader(
-        messageType: messageType,
-        messageTypeSpecificFlags: messageTypeSpecificFlags,
-        serializationType: serializationType,
-        compressionType: compressionType,
-        reservedData: value,
-      );
+    messageType: messageType,
+    messageTypeSpecificFlags: messageTypeSpecificFlags,
+    serializationType: serializationType,
+    compressionType: compressionType,
+    reservedData: value,
+  );
 
   /// Serializes the header into the 4-byte binary layout required by the
   /// BytePlus SAUC protocol.

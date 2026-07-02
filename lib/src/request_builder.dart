@@ -11,7 +11,8 @@ import 'protocol_constants.dart';
 /// Assembles binary request frames for the SAUC protocol. Stateless apart
 /// from the [AsrConfig] and an injectable [Uuid] for tests.
 class RequestBuilder {
-  RequestBuilder({required this.config, Uuid? uuid}) : _uuid = uuid ?? const Uuid();
+  RequestBuilder({required this.config, Uuid? uuid})
+    : _uuid = uuid ?? const Uuid();
 
   final AsrConfig config;
   final Uuid _uuid;
@@ -52,37 +53,46 @@ class RequestBuilder {
     final compressedPayload = gzip.encode(payloadBytes);
     final payloadSize = compressedPayload.length;
 
-    final builder = BytesBuilder()
-      ..add(header.toBytes())
-      ..add(_int32BigEndian(seq))
-      ..add(_uint32BigEndian(payloadSize))
-      ..add(compressedPayload);
+    final builder =
+        BytesBuilder()
+          ..add(header.toBytes())
+          ..add(_int32BigEndian(seq))
+          ..add(_uint32BigEndian(payloadSize))
+          ..add(compressedPayload);
 
     return builder.toBytes();
   }
 
   /// Audio-only frame for one PCM segment. When [isLast] is true the
   /// sequence number is negated to signal end-of-stream.
-  Uint8List newAudioOnlyRequest(int seq, Uint8List segment,
-      {bool isLast = false}) {
+  Uint8List newAudioOnlyRequest(
+    int seq,
+    Uint8List segment, {
+    bool isLast = false,
+  }) {
     final base = AsrRequestHeader.defaultHeader();
-    final header = isLast
-        ? base
-            .withMessageType(MessageType.clientAudioOnlyRequest)
-            .withMessageTypeSpecificFlags(
-                MessageTypeSpecificFlags.negWithSequence)
-        : base
-            .withMessageType(MessageType.clientAudioOnlyRequest)
-            .withMessageTypeSpecificFlags(MessageTypeSpecificFlags.posSequence);
+    final header =
+        isLast
+            ? base
+                .withMessageType(MessageType.clientAudioOnlyRequest)
+                .withMessageTypeSpecificFlags(
+                  MessageTypeSpecificFlags.negWithSequence,
+                )
+            : base
+                .withMessageType(MessageType.clientAudioOnlyRequest)
+                .withMessageTypeSpecificFlags(
+                  MessageTypeSpecificFlags.posSequence,
+                );
 
     final seqToSend = isLast ? -seq : seq;
     final compressedSegment = gzip.encode(segment);
 
-    final builder = BytesBuilder()
-      ..add(header.toBytes())
-      ..add(_int32BigEndian(seqToSend))
-      ..add(_uint32BigEndian(compressedSegment.length))
-      ..add(compressedSegment);
+    final builder =
+        BytesBuilder()
+          ..add(header.toBytes())
+          ..add(_int32BigEndian(seqToSend))
+          ..add(_uint32BigEndian(compressedSegment.length))
+          ..add(compressedSegment);
 
     return builder.toBytes();
   }
