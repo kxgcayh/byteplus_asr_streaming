@@ -13,14 +13,10 @@ import 'logging.dart';
 /// Composes [BytePlusAsrClient] and [AudioRecorder]; exposes observable
 /// state for UI binding and imperative [start] / [stop] for user actions.
 class AsrSessionController extends ChangeNotifier {
-  AsrSessionController({
-    required this.config,
-    AsrLog? log,
-    BytePlusAsrClient? client,
-    AudioRecorder? recorder,
-  }) : _log = log ?? AsrLoggers.silent(),
-       _client = client ?? BytePlusAsrClient(config: config, log: log),
-       _recorder = recorder ?? AudioRecorder();
+  AsrSessionController({required this.config, AsrLog? log, BytePlusAsrClient? client, AudioRecorder? recorder})
+    : _log = log ?? AsrLoggers.silent(),
+      _client = client ?? BytePlusAsrClient(config: config, log: log),
+      _recorder = recorder ?? AudioRecorder();
 
   final AsrConfig config;
   final AsrLog _log;
@@ -58,11 +54,7 @@ class AsrSessionController extends ChangeNotifier {
       _responseSub = _client.recvMessages().listen(_handleResponse);
 
       final stream = await _recorder.startStream(
-        RecordConfig(
-          encoder: AudioEncoder.pcm16bits,
-          sampleRate: config.sampleRate,
-          numChannels: config.numChannels,
-        ),
+        RecordConfig(encoder: AudioEncoder.pcm16bits, sampleRate: config.sampleRate, numChannels: config.numChannels),
       );
       _audioSub = stream.listen(_client.sendAudioSegment);
 
@@ -70,12 +62,7 @@ class AsrSessionController extends ChangeNotifier {
       _transcription = '';
       _error = null;
     } catch (e, st) {
-      _log.call(
-        'Session start failed: $e',
-        level: AsrLogLevel.error,
-        error: e,
-        stackTrace: st,
-      );
+      _log.call('Session start failed: $e', level: AsrLogLevel.error, error: e, stackTrace: st);
       _error = e;
       await _stopInternal();
     }
@@ -103,7 +90,6 @@ class AsrSessionController extends ChangeNotifier {
     await _client.close();
 
     _isRecording = false;
-    _transcription = '';
   }
 
   void _handleResponse(AsrResponse response) {

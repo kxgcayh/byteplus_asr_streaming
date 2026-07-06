@@ -34,6 +34,7 @@ class BytePlusAsrClient {
   WebSocketChannel? conn;
 
   Future<void> createConnection() async {
+    seq = 1;
     final headers = _builder.newAuthHeaders();
     try {
       conn = IOWebSocketChannel.connect(
